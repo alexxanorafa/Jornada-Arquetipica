@@ -298,7 +298,16 @@ h2 {
 }
 
 .card-arquetipo.flipped {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) translateZ(20px);
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+}
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+.sistema-alquimico {
+  animation: float 6s ease-in-out infinite;
 }
 
 .simbolo-elemento {
@@ -320,6 +329,8 @@ h2 {
   display: block;
   background: #f8f1e7;
   touch-action: none;
+  transition: all 0.3s ease;
+  cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'><circle cx='16' cy='16' r='8' fill='%23${var(--primary)}' /></svg>") 16 16, auto;
 }
 
 .controles {
@@ -363,11 +374,13 @@ button:hover {
   transition: all 0.3s ease;
   position: relative;
   background: rgba(255, 255, 255, 0.9);
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .simbolo.ativo {
   animation: pulsar 1.5s infinite;
   box-shadow: 0 0 15px var(--glow);
+  transform: scale(1.1) rotate(5deg);
 }
 
 @keyframes pulsar {
