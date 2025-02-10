@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornada Arquetípica</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="menu-icon" id="menuIcon">☰</div>
+        <nav class="menu" id="menu">
+            <ul>
+                <a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/" class="menu-item">Tempo e Sonhos</a>
+                <a href="https://alexxanorafa.github.io/posicionamentodosastros/" class="menu-item">Mapa Astral</a>
+                <a href="https://alexxanorafa.github.io/Aneis_da_Sabedoria/" class="menu-item">Anéis da Sabedoria</a>
+                <a href="https://alexxanorafa.github.io/TarodeMarselha/" class="menu-item">Tarô de Marselha</a>
+                <a href="https://alexxanorafa.github.io/Runas-do-Destino/" class="menu-item">Runas do Destino</a>
+                <a href="https://alexxanorafa.github.io/O-Construtor-do-Destino/" class="menu-item">O Construtor do Destino</a>
+                <a href="https://alexxanorafa.github.io/Tabuleiro-Quantico/" class="menu-item">Tabuleiro Quantico</a>
+                <a href="https://alexxanorafa.github.io/Oraculo-das-Pedras/" class="menu-item">Oráculo das Pedras</a>
+                <a href="https://alexxanorafa.github.io/I-Ching-Virtual/" class="menu-item">I Ching Virtual</a>
+                <a href="https://alexxanorafa.github.io/Biblioteca-Onirica/" class="menu-item">Biblioteca Onirica</a>
+                <a href="https://alexxanorafa.github.io/Kabbalah-Interativa/" class="menu-item">Kabbalah Interativa</a>
+                <a href="https://alexxanorafa.github.io/Almas-Conectadas/" class="menu-item">Almas Conectadas</a>
+                <a href="https://alexxanorafa.github.io/Pendulo-Divinatorio/" class="menu-item">Pendulo Divinatorio</a>
+                <a href="https://alexxanorafa.github.io/Buzios/" class="menu-item">Buzios</a>
+                <a href="https://alexxanorafa.github.io/Tasseografia/" class="menu-item">Tasseografia</a>
+                <a href="https://alexxanorafa.github.io/Xamanismo-Animal/" class="menu-item">Xamanismo Animal</a>
+                <a href="https://alexxanorafa.github.io/Animais-de-Poder/" class="menu-item">Animais de Poder</a>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="sistema-alquimico">
+            <div class="caldeirao" id="caldeiraoAlquimico">
+                <div class="elementos-ativos"></div>
+            </div>
+            <div class="instrucoes">
+                <p>Combine Arquétipos e Símbolos para revelar sabedoria!</p>
+            </div>
+        </div>
+
+        <section class="secao-arquetipos">
+            <h2>Arquétipos Primordiais</h2>
+            <div class="grid-arquetipos">
+                <div class="card-arquetipo" data-arquetipo="curador" data-elemento="agua">
+                    <div class="frente"></div>
+                    <div class="verso">
+                        <h3>O Curador</h3>
+                        <p>Transformação através da cura emocional</p>
+                        <div class="simbolo-elemento">🌊</div>
+                    </div>
+                </div>
+                <div class="card-arquetipo" data-arquetipo="sabio" data-elemento="ar">
+                    <div class="frente"></div>
+                    <div class="verso">
+                        <h3>O Sábio</h3>
+                        <p>Sabedoria através da contemplação</p>
+                        <div class="simbolo-elemento">🌪️</div>
+                    </div>
+                </div>
+                <div class="card-arquetipo" data-arquetipo="heroi" data-elemento="fogo">
+                    <div class="frente"></div>
+                    <div class="verso">
+                        <h3>O Herói</h3>
+                        <p>Coragem através da ação</p>
+                        <div class="simbolo-elemento">🔥</div>
+                    </div>
+                </div>
+                <div class="card-arquetipo" data-arquetipo="mae" data-elemento="terra">
+                    <div class="frente"></div>
+                    <div class="verso">
+                        <h3>A Grande Mãe</h3>
+                        <p>Nutrição através da compaixão</p>
+                        <div class="simbolo-elemento">🌱</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="secao-labirintos">
+            <h2>Labirintos da Consciência</h2>
+            <div class="controle-labirinto">
+                <select id="selecionarLabirinto">
+                    <option value="chartres">Catedral de Chartres</option>
+                    <option value="cristal">Labirinto de Cristal</option>
+                    <option value="espiral">Espiral Meditativa</option>
+                </select>
+                <div class="dificuldade">
+                    <span>Dificuldade:</span>
+                    <div class="estrelas" data-dificuldade="3">★★★☆☆</div>
+                </div>
+            </div>
+            <canvas id="labyrinthCanvas"></canvas>
+            <div class="controles">
+                <button id="reiniciarLabirinto">↻ Reiniciar</button>
+                <div class="temporizador">⏳ 00:00</div>
+            </div>
+        </section>
+
+        <section class="secao-simbolos">
+            <h2>Símbolos Alquímicos</h2>
+            <div class="puzzle-simbolos">
+                <div class="simbolo" data-simbolo="ouroboros" data-elemento="fogo">
+                    <div class="dica">🔥</div>
+                </div>
+                <div class="simbolo" data-simbolo="caduceu" data-elemento="ar">
+                    <div class="dica">🌪️</div>
+                </div>
+                <div class="simbolo" data-simbolo="triquetra" data-elemento="agua">
+                    <div class="dica">🌊</div>
+                </div>
+                <div class="simbolo" data-simbolo="arvore" data-elemento="terra">
+                    <div class="dica">🌱</div>
+                </div>
+            </div>
+            <div class="legenda-interativa" id="legendaAlquimia"></div>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
