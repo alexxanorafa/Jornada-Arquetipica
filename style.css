@@ -1,12 +1,12 @@
 :root {
-  --primary: #d4b192; /* Azul escuro sofisticado */
-  --secondary: #2c3e50; /* Mantido */
-  --glow: #f4a261; /* Laranja suave e quente */
-  --agua: #a8dadc; /* Azul pastel com leve toque esverdeado */
-  --fogo: #e5989b; /* Vermelho suave, mais rosado */
-  --terra: #b5c99a; /* Verde pastel terroso */
-  --ar: #c6a0f6; /* Roxo lavanda, leve e arejado */
-  --sombra: 0 4px 6px rgba(150, 145, 145, 0.1); /* Mantida discreta */
+  --primary: #d4b192;
+  --secondary: #2c3e50;
+  --glow: #ff9f1c;
+  --agua: #4a90e2;
+  --fogo: #e74c3c;
+  --terra: #27ae60;
+  --ar: #9b59b6;
+  --sombra: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -18,19 +18,19 @@
 body {
   font-family: 'Times New Roman', serif;
   padding: 20px;
-  margin-top: 60px; /* Espaço para o header fixo */
+  margin-top: 60px;
   background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
   min-height: 100vh;
 }
 
-/* ========== NOVO HEADER ========== */
+/* Header e Menu de Navegação */
 header {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 60px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.9);
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -39,46 +39,26 @@ header {
   backdrop-filter: blur(5px);
   border-bottom: 1px solid var(--primary);
 }
-h1 {
-  color: var(--primary);
-  text-align: center;
-  align-items: center;
-  content: normal;
-  font-size: 1.6rem;
-}
-h2 {
-  color: var(--primary);
-  text-align: center;
-  align-items: center;
-  content: normal;
-  font-size: 1.0rem;
-}
 
 .menu-icon {
-  cursor: pointer;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  width: 30px;
-  height: 22px;
-  transition: transform 0.3s;
-}
-
-.menu-icon:hover {
-  transform: scale(1.1);
+  gap: 5px;
+  cursor: pointer;
+  padding: 10px;
+  z-index: 1001;
 }
 
 .menu-icon span {
-  display: block;
-  width: 100%;
+  width: 30px;
   height: 3px;
   background: var(--primary);
-  border-radius: 3px;
   transition: 0.3s;
+  transform-origin: center;
 }
 
 .menu-icon.active span:nth-child(1) {
-  transform: translateY(8px) rotate(45deg);
+  transform: rotate(45deg) translate(6px, 6px);
 }
 
 .menu-icon.active span:nth-child(2) {
@@ -86,27 +66,23 @@ h2 {
 }
 
 .menu-icon.active span:nth-child(3) {
-  transform: translateY(-8px) rotate(-45deg);
+  transform: rotate(-45deg) translate(6px, -6px);
 }
 
 .menu {
-  position: absolute;
-  top: -1500px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 80%;
-  max-width: 350px;
+  position: fixed;
+  top: -100vh;
+  left: 0;
+  width: 100%;
+  height: 100vh;
   background: rgba(44, 62, 80, 0.98);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: var(--border-radius);
-  box-shadow: 0 4px 12px rgba(44, 62, 80, 0.98);
-  padding: 15px 0;
-  opacity: 0;
+  transition: top 0.5s ease-in-out;
+  padding-top: 70px;
+  z-index: 1000;
 }
 
 .menu.active {
-  top: 65px;
-  opacity: 1;
+  top: 0;
 }
 
 .menu ul {
@@ -115,14 +91,14 @@ h2 {
   gap: 12px;
   padding: 0 15px;
   list-style: none;
-  max-height: 600px; /* Altura máxima */
-  overflow-y: auto; /* Scroll apenas quando necessário */
-  padding-right: 10px; /* Espaço para a barra de rolagem */
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 10px;
 }
 
 .menu-item {
   background: rgba(212, 177, 146, 0.1);
-  border-radius: var(--border-radius);
+  border-radius: 8px;
   height: 40px;
   display: flex;
   align-items: center;
@@ -152,10 +128,8 @@ h2 {
   left: 0;
   width: 100%;
   height: 100%;
-  border-radius: var(--border-radius);
-  background: radial-gradient(circle at center, 
-             rgba(212, 177, 146, 0.2) 0%, 
-             transparent 70%);
+  border-radius: 8px;
+  background: radial-gradient(circle at center, rgba(212, 177, 146, 0.2) 0%, transparent 70%);
   opacity: 0;
   transition: opacity 0.3s;
 }
@@ -164,56 +138,7 @@ h2 {
   opacity: 1;
 }
 
-@media (max-width: 480px) {
-  h1 {
-      font-size: 1.6rem;
-  }
-
-  .menu-list {
-      gap: 6px;
-  }
-
-  .menu-item {
-      font-size: 0.75rem;
-      padding: 3px 8px;
-      min-height: 26px;
-  }
-
-  input {
-      width: 95%;
-      padding: 8px;
-      font-size: 0.9rem;
-  }
-
-  #question-container {
-      font-size: 1rem;
-  }
-
-  .option-btn {
-      padding: 10px;
-      font-size: 0.9rem;
-  }
-
-  #progress-bar {
-      height: 10px;
-  }
-}
-
-@media (max-width: 320px) {
-  h1 {
-      font-size: 1.4rem;
-  }
-
-  .menu-item {
-      font-size: 0.7rem;
-  }
-
-  button {
-      min-width: 100px;
-      padding: 8px 15px;
-  }
-}
-
+/* Container Principal */
 .container {
   max-width: 1200px;
   margin: 6rem auto 2rem;
@@ -224,6 +149,7 @@ h2 {
   min-height: 100vh;
 }
 
+/* Sistema Alquímico */
 .sistema-alquimico {
   display: grid;
   grid-template-columns: 200px 1fr;
@@ -238,7 +164,7 @@ h2 {
   background: var(--secondary);
   position: relative;
   overflow: hidden;
-  box-shadow: inset 0 0 20px rgba(0,0,0,0.2);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
 }
 
 .elementos-ativos {
@@ -252,6 +178,7 @@ h2 {
   color: white;
 }
 
+/* Arquétipos */
 .grid-arquetipos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -294,20 +221,22 @@ h2 {
   background: linear-gradient(45deg, #fff, #f8f8f8);
   transform: rotateY(180deg);
   color: var(--secondary);
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 .card-arquetipo.flipped {
   transform: rotateY(180deg) translateZ(20px);
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.2));
 }
+
 @keyframes float {
   0% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
   100% { transform: translateY(0); }
 }
+
 .sistema-alquimico {
-    animation: float 6s ease-in-out infinite;
+  animation: float 6s ease-in-out infinite;
 }
 
 .simbolo-elemento {
@@ -315,6 +244,7 @@ h2 {
   margin-top: 1rem;
 }
 
+/* Labirintos */
 .secao-labirintos {
   margin: 3rem 0;
 }
@@ -355,6 +285,16 @@ button:hover {
   box-shadow: var(--sombra);
 }
 
+.styled-select {
+  padding: 0.8rem 1.5rem;
+  border: 2px solid var(--secondary);
+  border-radius: 8px;
+  background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%232c3e50'><path d='M7 10l5 5 5-5z'/></svg>") no-repeat right 1rem center/12px;
+  appearance: none;
+  font-size: 1rem;
+}
+
+/* Símbolos Alquímicos */
 .puzzle-simbolos {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
@@ -375,6 +315,9 @@ button:hover {
   position: relative;
   background: rgba(255, 255, 255, 0.9);
   transition: transform 0.3s, box-shadow 0.3s;
+  background-size: 60%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .simbolo.ativo {
@@ -405,12 +348,6 @@ button:hover {
   min-height: 60px;
 }
 
-@keyframes pulsarTexto {
-  0% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.1); opacity: 0.8; }
-  100% { transform: scale(1); opacity: 1; }
-}
-
 .concluido {
   animation: pulsar 2s infinite;
   border-color: var(--glow) !important;
@@ -423,21 +360,89 @@ button:hover {
   transition: all 0.5s ease;
 }
 
+.simbolo::after {
+  content: attr(data-simbolo);
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8em;
+  color: var(--secondary);
+  opacity: 0;
+  transition: opacity 0.3s;
+  text-transform: capitalize;
+}
+
+.simbolo.ativo::after {
+  opacity: 1;
+}
+
+/* Responsividade */
 @media (max-width: 768px) {
   .container {
-      padding: 1rem;
-      margin-top: 4rem;
+    padding: 1rem;
+    margin-top: 4rem;
   }
-  
+
   .sistema-alquimico {
-      grid-template-columns: 1fr;
+    grid-template-columns: 1fr;
   }
-  
+
   .caldeirao {
-      margin: 0 auto;
+    margin: 0 auto;
   }
-  
+
   .grid-arquetipos {
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  .menu-list {
+    gap: 6px;
+  }
+
+  .menu-item {
+    font-size: 0.75rem;
+    padding: 3px 8px;
+    min-height: 26px;
+  }
+
+  input {
+    width: 95%;
+    padding: 8px;
+    font-size: 0.9rem;
+  }
+
+  #question-container {
+    font-size: 1rem;
+  }
+
+  .option-btn {
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  #progress-bar {
+    height: 10px;
+  }
+}
+
+@media (max-width: 320px) {
+  h1 {
+    font-size: 1.4rem;
+  }
+
+  .menu-item {
+    font-size: 0.7rem;
+  }
+
+  button {
+    min-width: 100px;
+    padding: 8px 15px;
   }
 }
