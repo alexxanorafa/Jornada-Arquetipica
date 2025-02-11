@@ -26,36 +26,6 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-    // ========== CÓDIGO DO MENU ==========
-    const menuIcon = document.getElementById("menuIcon");
-    const menu = document.getElementById("menu");
-
-    // Abrir/Fechar menu
-    menuIcon.addEventListener("click", function(e) {
-        e.stopPropagation();
-        menu.classList.toggle("active");
-        menuIcon.classList.toggle("active");
-    });
-
-    // Fechar menu ao clicar fora
-    document.addEventListener("click", function(e) {
-        if (!menu.contains(e.target) && !menuIcon.contains(e.target)) {
-            menu.classList.remove("active");
-            menuIcon.classList.remove("active");
-        }
-    });
-
-    // Animar itens do menu
-    document.querySelectorAll(".menu-item").forEach(item => {
-        item.addEventListener("mouseenter", function() {
-            this.style.transform = "translateY(-3px)";
-        });
-        
-        item.addEventListener("mouseleave", function() {
-            this.style.transform = "translateY(0)";
-        });
-    });
-
 class JogoAlquimia {
     constructor() {
         this.arquetiposAtivos = new Set();
@@ -65,27 +35,33 @@ class JogoAlquimia {
         this.labirintos = {
             chartres: this.criarLabirintoChartres.bind(this),
             cristal: this.criarLabirintoCristal.bind(this),
-            espiral: this.criarLabirintoEspiral.bind(this)
+            espiral: this.criarLabirintoEspiral.bind(this),
+            mandala: this.criarLabirintoMandala.bind(this),
+            hexagono: this.criarLabirintoHexagonal.bind(this),
         };
         this.combinacoes = {
-            'agua,fogo': {
-                mensagem: 'Água + Fogo = Vapor da Transformação 🔥💧',
-                efeito: () => this.revelarCaminho('espiral')
+            "agua,fogo": {
+                mensagem: "Água + Fogo = Vapor da Transformação 🔥💧",
+                efeito: () => this.revelarCaminho("espiral"),
             },
-            'terra,ar': {
-                mensagem: 'Terra + Ar = Tempestade da Criação 🌪️🌱',
-                efeito: () => this.revelarCaminho('cristal')
+            "terra,ar": {
+                mensagem: "Terra + Ar = Tempestade da Criação 🌪️🌱",
+                efeito: () => this.revelarCaminho("cristal"),
             },
-            'fogo,ar': {
-                mensagem: 'Fogo + Ar = Chama da Inspiração 🔥🌪️',
-                efeito: () => this.ativarSimboloEspecial('inspiracao')
-            }
+            "fogo,ar": {
+                mensagem: "Fogo + Ar = Chama da Inspiração 🔥🌪️",
+                efeito: () => this.ativarSimboloEspecial("inspiracao"),
+            },
+            "terra,ar,ouroboros": {
+                mensagem: "Trindade Elemental Despertada! 🌍🌪️🐍",
+                efeito: () => this.revelarCaminho("mandala"),
+            },
         };
-        this.canvas = document.getElementById('labyrinthCanvas');
-        this.ctx = this.canvas.getContext('2d');
+        this.canvas = document.getElementById("labyrinthCanvas");
+        this.ctx = this.canvas.getContext("2d");
         this.path = [];
         this.isDrawing = false;
-        this.ctx.globalCompositeOperation = 'source-over';
+        this.ctx.globalCompositeOperation = "source-over";
         this.init();
     }
 
@@ -101,50 +77,49 @@ class JogoAlquimia {
     }
 
     mostrarTutorialInicial() {
-        const tutorial = document.getElementById('tutorial');
-        if (!localStorage.getItem('tutorialVisto')) {
-            tutorial.style.display = 'flex';
-            localStorage.setItem('tutorialVisto', 'true');
+        const tutorial = document.getElementById("tutorial");
+        if (!localStorage.getItem("tutorialVisto")) {
+            tutorial.style.display = "flex";
+            localStorage.setItem("tutorialVisto", "true");
         }
     }
 
     configurarMenu() {
-        const menuIcon = document.getElementById('menuIcon');
-        const menu = document.getElementById('menu');
-        
-        menuIcon.addEventListener('click', (event) => {
+        const menuIcon = document.getElementById("menuIcon");
+        const menu = document.getElementById("mainMenu");
+
+        menuIcon.addEventListener("click", (event) => {
             event.stopPropagation();
-            menu.classList.toggle('active');
+            menu.classList.toggle("active");
         });
 
-        document.addEventListener('click', (event) => {
+        document.addEventListener("click", (event) => {
             if (!menu.contains(event.target) && !menuIcon.contains(event.target)) {
-                menu.classList.remove('active');
+                menu.classList.remove("active");
             }
         });
 
-        document.querySelectorAll('.menu-item').forEach(item => {
-            item.addEventListener('click', (event) => {
+        document.querySelectorAll(".menu-item").forEach((item) => {
+            item.addEventListener("click", (event) => {
                 event.preventDefault();
-                menu.classList.remove('active');
+                menu.classList.remove("active");
             });
         });
     }
 
     configurarArquetipos() {
-        document.querySelectorAll('.card-arquetipo').forEach(card => {
-            card.addEventListener('click', () => {
-                card.classList.toggle('flipped');
+        document.querySelectorAll(".card-arquetipo").forEach((card) => {
+            card.addEventListener("click", () => {
+                card.classList.toggle("flipped");
                 const elemento = card.dataset.elemento;
-                
-                if (card.classList.contains('flipped')) {
+
+                if (card.classList.contains("flipped")) {
                     this.arquetiposAtivos.add(elemento);
                     this.mostrarEfeitoFusao(card);
-                    this.reproduzirSom('flip');
                 } else {
                     this.arquetiposAtivos.delete(elemento);
                 }
-                
+
                 this.verificarCombinacoes();
             });
         });
@@ -152,15 +127,15 @@ class JogoAlquimia {
 
     mostrarEfeitoFusao(elemento) {
         const clone = elemento.cloneNode(true);
-        clone.style.position = 'absolute';
-        clone.style.opacity = '0';
-        clone.style.transform = 'scale(0)';
+        clone.style.position = "absolute";
+        clone.style.opacity = "0";
+        clone.style.transform = "scale(0)";
         document.body.appendChild(clone);
-        
+
         const retangulo = elemento.getBoundingClientRect();
-        const caldeirao = document.getElementById('caldeiraoAlquimico');
+        const caldeirao = document.getElementById("caldeiraoAlquimico");
         const destino = caldeirao.getBoundingClientRect();
-        
+
         anime({
             targets: clone,
             opacity: [0, 1],
@@ -168,8 +143,29 @@ class JogoAlquimia {
             top: [`${retangulo.top}px`, `${destino.top}px`],
             left: [`${retangulo.left}px`, `${destino.left}px`],
             duration: 1000,
-            easing: 'easeInOutQuad',
-            complete: () => clone.remove()
+            easing: "easeInOutQuad",
+            complete: () => clone.remove(),
+        });
+    }
+
+    configurarSimbolos() {
+        document.querySelectorAll(".simbolo").forEach((simbolo) => {
+            simbolo.addEventListener("click", () => {
+                simbolo.classList.toggle("ativo");
+                const tipo = simbolo.dataset.simbolo;
+                const elemento = simbolo.dataset.elemento;
+
+                if (simbolo.classList.contains("ativo")) {
+                    const svg = this.generateSymbol(tipo);
+                    simbolo.style.backgroundImage = `url("data:image/svg+xml;utf8,${svg}")`;
+                    this.simbolosAtivos.add(elemento);
+                } else {
+                    simbolo.style.backgroundImage = "";
+                    this.simbolosAtivos.delete(elemento);
+                }
+
+                this.verificarCombinacoes();
+            });
         });
     }
 
@@ -179,67 +175,42 @@ class JogoAlquimia {
                 <circle cx="50" cy="50" r="45" fill="none" stroke="#2c3e50" stroke-width="3"/>
                 <path d="M30 50Q50 30 70 50Q50 70 30 50" fill="none" stroke="#d4b192" stroke-width="3"/>
             </svg>`,
-            
             caduceu: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <path d="M50 5v90M45 20l10-15 10 15M45 80l10 15 10-15" 
                       stroke="#2c3e50" stroke-width="3" fill="none"/>
             </svg>`,
-            
             triquetra: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <path d="M50 20a30 30 0 0 1 30 30 30 30 0 0 1-30 30 30 30 0 0 1-30-30 30 30 0 0 1 30-30m0 15a15 15 0 0 0-15 15 15 15 0 0 0 15 15 15 15 0 0 0 15-15 15 15 0 0 0-15-15" 
                       stroke="#2c3e50" stroke-width="3" fill="none"/>
             </svg>`,
-            
             arvore: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                 <path d="M50 95V50M50 50Q30 30 50 10Q70 30 50 50M40 35L50 25 60 35M45 45L50 40 55 45" 
                       stroke="#2c3e50" stroke-width="3" fill="none"/>
-            </svg>`
+            </svg>`,
         };
 
         return encodeURIComponent(symbols[tipo])
-            .replace(/'/g, '%27')
-            .replace(/"/g, '%22');
-    }
-
-    configurarSimbolos() {
-        document.querySelectorAll('.simbolo').forEach(simbolo => {
-            simbolo.addEventListener('click', () => {
-                simbolo.classList.toggle('ativo');
-                const tipo = simbolo.dataset.simbolo;
-                const elemento = simbolo.dataset.elemento;
-                
-                if (simbolo.classList.contains('ativo')) {
-                    const svg = this.generateSymbol(tipo);
-                    simbolo.style.backgroundImage = `url("data:image/svg+xml;utf8,${svg}")`;
-                    this.simbolosAtivos.add(elemento);
-                    this.reproduzirSom('symbol');
-                } else {
-                    simbolo.style.backgroundImage = '';
-                    this.simbolosAtivos.delete(elemento);
-                }
-                
-                this.verificarCombinacoes();
-            });
-        });
+            .replace(/'/g, "%27")
+            .replace(/"/g, "%22");
     }
 
     verificarCombinacoes() {
         const elementos = [...this.arquetiposAtivos, ...this.simbolosAtivos];
-        const combinacaoOrdenada = elementos.sort().join(',');
-        
+        const combinacaoOrdenada = elementos.sort().join(",");
+
         if (this.combinacoes[combinacaoOrdenada]) {
             this.ativarEfeitoCombinacao(combinacaoOrdenada);
             return;
         }
-        
-        const combinacoesPossiveis = Object.keys(this.combinacoes).filter(chave => 
-            chave.split(',').every(elemento => elementos.includes(elemento))
+
+        const combinacoesPossiveis = Object.keys(this.combinacoes).filter((chave) =>
+            chave.split(",").every((elemento) => elementos.includes(elemento))
         );
-        
+
         if (combinacoesPossiveis.length > 0) {
             this.mostrarDicaCombinacao(combinacoesPossiveis[0]);
         } else {
-            document.getElementById('legendaAlquimia').textContent = '';
+            document.getElementById("legendaAlquimia").textContent = "";
         }
     }
 
@@ -247,39 +218,45 @@ class JogoAlquimia {
         const combinacao = this.combinacoes[chave];
         this.mostrarMensagemAlquimia(combinacao.mensagem);
         combinacao.efeito();
-        
+
         anime({
-            targets: '#caldeiraoAlquimico',
+            targets: "#caldeiraoAlquimico",
             scale: [1, 1.2],
             duration: 1000,
-            easing: 'easeInOutQuad',
-            direction: 'alternate'
+            easing: "easeInOutQuad",
+            direction: "alternate",
         });
     }
 
     mostrarDicaCombinacao(chave) {
-        const elementos = chave.split(',');
-        const dica = elementos.map(elemento => {
-            switch(elemento) {
-                case 'agua': return '🌊';
-                case 'fogo': return '🔥';
-                case 'terra': return '🌱';
-                case 'ar': return '🌪️';
-                default: return '';
-            }
-        }).join(' + ');
-        
-        document.getElementById('legendaAlquimia').innerHTML = 
-            `Dica: Combine ${dica} para revelar novos caminhos!`;
+        const elementos = chave.split(",");
+        const dica = elementos
+            .map((elemento) => {
+                switch (elemento) {
+                    case "agua":
+                        return "🌊";
+                    case "fogo":
+                        return "🔥";
+                    case "terra":
+                        return "🌱";
+                    case "ar":
+                        return "🌪️";
+                    default:
+                        return "";
+                }
+            })
+            .join(" + ");
+
+        document.getElementById("legendaAlquimia").innerHTML = `Dica: Combine ${dica} para revelar novos caminhos!`;
     }
 
     configurarLabirinto() {
         this.canvas.width = 600;
         this.canvas.height = 400;
-        
-        document.getElementById('selecionarLabirinto').addEventListener('change', (event) => {
+
+        document.getElementById("selecionarLabirinto").addEventListener("change", (event) => {
             this.labirintos[event.target.value]();
-            this.canvas.classList.remove('concluido');
+            this.canvas.classList.remove("concluido");
             this.tempoInicial = Date.now();
         });
 
@@ -287,31 +264,31 @@ class JogoAlquimia {
     }
 
     configurarEventosCanvas() {
-        this.canvas.addEventListener('mousedown', (event) => this.iniciarDesenho(event));
-        this.canvas.addEventListener('mousemove', (event) => this.desenhar(event));
-        this.canvas.addEventListener('mouseup', () => this.finalizarDesenho());
-        this.canvas.addEventListener('mouseleave', () => this.finalizarDesenho());
-        
-        this.canvas.addEventListener('touchstart', (event) => {
+        this.canvas.addEventListener("mousedown", (event) => this.iniciarDesenho(event));
+        this.canvas.addEventListener("mousemove", (event) => this.desenhar(event));
+        this.canvas.addEventListener("mouseup", () => this.finalizarDesenho());
+        this.canvas.addEventListener("mouseleave", () => this.finalizarDesenho());
+
+        this.canvas.addEventListener("touchstart", (event) => {
             event.preventDefault();
             this.iniciarDesenho(event.touches[0]);
         });
-        this.canvas.addEventListener('touchmove', (event) => {
+        this.canvas.addEventListener("touchmove", (event) => {
             event.preventDefault();
             this.desenhar(event.touches[0]);
         });
-        this.canvas.addEventListener('touchend', () => this.finalizarDesenho());
+        this.canvas.addEventListener("touchend", () => this.finalizarDesenho());
     }
 
     criarLabirintoChartres() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--secondary');
+        this.ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--secondary");
         this.ctx.lineWidth = 3;
         this.ctx.beginPath();
-        
+
         const centerX = this.canvas.width / 2;
         const centerY = this.canvas.height / 2;
-        
+
         this.ctx.moveTo(centerX - 150, centerY - 100);
         this.ctx.bezierCurveTo(
             centerX - 50, centerY - 200,
@@ -324,25 +301,25 @@ class JogoAlquimia {
 
     criarLabirintoCristal() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--secondary');
+        this.ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--secondary");
         this.ctx.lineWidth = 3;
         this.ctx.beginPath();
-        
+
         const lados = 8;
         const raio = 100;
-        const centro = { 
-            x: this.canvas.width / 2, 
-            y: this.canvas.height / 2 
+        const centro = {
+            x: this.canvas.width / 2,
+            y: this.canvas.height / 2,
         };
-        
+
         for (let i = 0; i < lados; i++) {
             const angulo = (i * (360 / lados)) * Math.PI / 180;
             const x = centro.x + Math.cos(angulo) * raio;
             const y = centro.y + Math.sin(angulo) * raio;
-            
+
             this.ctx.moveTo(centro.x, centro.y);
             this.ctx.lineTo(x, y);
-            
+
             if (i % 2 === 0) {
                 this.ctx.arc(x, y, 30, 0, Math.PI * 2);
             }
@@ -352,30 +329,84 @@ class JogoAlquimia {
 
     criarLabirintoEspiral() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--secondary');
+        this.ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--secondary");
         this.ctx.lineWidth = 3;
         this.ctx.beginPath();
-        
-        const centro = { 
-            x: this.canvas.width / 2, 
-            y: this.canvas.height / 2 
+
+        const centro = {
+            x: this.canvas.width / 2,
+            y: this.canvas.height / 2,
         };
         let raio = 10;
-        
+
         for (let i = 0; i < 500; i++) {
             const angulo = 0.1 * i;
             const x = centro.x + (raio + angulo) * Math.cos(angulo);
             const y = centro.y + (raio + angulo) * Math.sin(angulo);
-            
+
             if (i === 0) {
                 this.ctx.moveTo(x, y);
             } else {
                 this.ctx.lineTo(x, y);
             }
-            
+
             raio += 0.1;
         }
         this.ctx.stroke();
+    }
+
+    criarLabirintoMandala() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--secondary");
+        this.ctx.lineWidth = 3;
+
+        const centro = { x: this.canvas.width / 2, y: this.canvas.height / 2 };
+        const camadas = 8;
+
+        for (let i = 0; i < camadas; i++) {
+            this.ctx.beginPath();
+            this.ctx.arc(centro.x, centro.y, 30 + (i * 30), 0, Math.PI * 2);
+            this.ctx.stroke();
+
+            this.ctx.beginPath();
+            this.ctx.moveTo(centro.x - 100 + (i * 15), centro.y);
+            this.ctx.lineTo(centro.x + 100 - (i * 15), centro.y);
+            this.ctx.stroke();
+        }
+    }
+
+    criarLabirintoHexagonal() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue("--secondary");
+        this.ctx.lineWidth = 3;
+
+        const lados = 6;
+        const raio = 120;
+        const centro = { x: this.canvas.width / 2, y: this.canvas.height / 2 };
+
+        this.ctx.beginPath();
+        for (let i = 0; i <= lados; i++) {
+            const angulo = (i * 2 * Math.PI / lados) - Math.PI / 2;
+            const x = centro.x + raio * Math.cos(angulo);
+            const y = centro.y + raio * Math.sin(angulo);
+
+            if (i === 0) this.ctx.moveTo(x, y);
+            else this.ctx.lineTo(x, y);
+        }
+        this.ctx.closePath();
+        this.ctx.stroke();
+
+        // Padrão interno
+        for (let i = 0; i < lados; i++) {
+            const angulo = (i * 2 * Math.PI / lados) - Math.PI / 2;
+            const x = centro.x + (raio / 2) * Math.cos(angulo);
+            const y = centro.y + (raio / 2) * Math.sin(angulo);
+
+            this.ctx.beginPath();
+            this.ctx.moveTo(centro.x, centro.y);
+            this.ctx.lineTo(x, y);
+            this.ctx.stroke();
+        }
     }
 
     iniciarDesenho(evento) {
@@ -384,30 +415,30 @@ class JogoAlquimia {
         this.path = [posicao];
         this.ctx.beginPath();
         this.ctx.moveTo(posicao.x, posicao.y);
-        this.reproduzirSom('start');
     }
 
     desenhar(evento) {
         if (!this.isDrawing) return;
         const posicao = this.getMousePos(evento);
-        
+
         this.ctx.lineTo(posicao.x, posicao.y);
         const estaCorreto = this.verificarPosicao(posicao);
-        
-        this.ctx.strokeStyle = estaCorreto ? 
-            getComputedStyle(document.documentElement).getPropertyValue('--primary') : '#ff4444';
+
+        this.ctx.strokeStyle = estaCorreto
+            ? getComputedStyle(document.documentElement).getPropertyValue("--primary")
+            : "#ff4444";
         this.ctx.lineWidth = estaCorreto ? 4 : 8;
         this.ctx.stroke();
-        
+
         if (!estaCorreto) {
             this.criarParticulaErro(posicao);
         }
-        
+
         this.path.push(posicao);
     }
 
     criarParticulaErro(posicao) {
-        const particula = document.createElement('div');
+        const particula = document.createElement("div");
         particula.style.cssText = `
             position: absolute;
             width: 8px;
@@ -419,32 +450,38 @@ class JogoAlquimia {
             pointer-events: none;
         `;
         document.body.appendChild(particula);
-        
+
         anime({
             targets: particula,
             opacity: [1, 0],
             translateY: [-20, 0],
             duration: 1000,
-            easing: 'easeOutExpo',
-            complete: () => particula.remove()
+            easing: "easeOutExpo",
+            complete: () => particula.remove(),
         });
     }
 
     finalizarDesenho() {
         if (!this.isDrawing) return;
         this.isDrawing = false;
-        
-        const acertos = this.path.filter(ponto => this.verificarPosicao(ponto)).length;
+
+        const acertos = this.path.filter((ponto) => this.verificarPosicao(ponto)).length;
         const precisao = acertos / this.path.length;
-        
-        if (precisao > 0.9) {
-            this.canvas.classList.add('concluido');
-            this.mostrarMensagemAlquimia('Caminho Iluminado! 🌟');
-            this.reproduzirSom('success');
-        } else if (precisao > 0.6) {
-            this.mostrarMensagemAlquimia('Continue tentando! 💪');
+
+        if (precisao > 0.7) {
+            this.canvas.classList.add("concluido");
+            this.mostrarMensagemAlquimia("Caminho Iluminado! 🌟");
+            anime({
+                targets: ".sistema-alquimico",
+                scale: [1, 1.1],
+                duration: 1000,
+                easing: "easeInOutQuad",
+                direction: "alternate",
+            });
+        } else if (precisao > 0.5) {
+            this.mostrarMensagemAlquimia("Continue tentando! 💪");
         } else {
-            this.mostrarMensagemAlquimia('Tente novamente! 🔄');
+            this.mostrarMensagemAlquimia("Tente novamente! 🔄");
         }
     }
 
@@ -456,60 +493,46 @@ class JogoAlquimia {
         const retangulo = this.canvas.getBoundingClientRect();
         return {
             x: evento.clientX - retangulo.left,
-            y: evento.clientY - retangulo.top
+            y: evento.clientY - retangulo.top,
         };
     }
 
     configurarTemporizador() {
         this.temporizadorInterval = setInterval(() => {
             const tempoDecorrido = Math.floor((Date.now() - this.tempoInicial) / 1000);
-            const minutos = Math.floor(tempoDecorrido / 60).toString().padStart(2, '0');
-            const segundos = (tempoDecorrido % 60).toString().padStart(2, '0');
-            document.querySelector('.temporizador').textContent = `⏳ ${minutos}:${segundos}`;
+            const minutos = Math.floor(tempoDecorrido / 60).toString().padStart(2, "0");
+            const segundos = (tempoDecorrido % 60).toString().padStart(2, "0");
+            document.querySelector(".temporizador").textContent = `⏳ ${minutos}:${segundos}`;
         }, 1000);
     }
 
     configurarReinicio() {
-        document.getElementById('reiniciarLabirinto').addEventListener('click', () => {
+        document.getElementById("reiniciarLabirinto").addEventListener("click", () => {
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            this.labirintos[document.getElementById('selecionarLabirinto').value]();
-            this.canvas.classList.remove('concluido');
+            this.labirintos[document.getElementById("selecionarLabirinto").value]();
+            this.canvas.classList.remove("concluido");
             this.tempoInicial = Date.now();
             this.path = [];
-            this.reproduzirSom('reset');
         });
     }
 
     mostrarMensagemAlquimia(mensagem) {
-        const legenda = document.getElementById('legendaAlquimia');
+        const legenda = document.getElementById("legendaAlquimia");
         legenda.textContent = mensagem;
-        legenda.style.animation = 'none';
+        legenda.style.animation = "none";
         legenda.offsetHeight;
-        legenda.style.animation = 'pulsarTexto 1.5s infinite';
-    }
-
-    reproduzirSom(tipo) {
-        const sons = {
-            flip: new Audio('data:audio/wav;base64,UklGRl9v...'),
-            symbol: new Audio('data:audio/wav;base64,UklGRkZ...'),
-            success: new Audio('data:audio/wav;base64,UklGRkZ...'),
-            reset: new Audio('data:audio/wav;base64,UklGRkZ...'),
-            start: new Audio('data:audio/wav;base64,UklGRkZ...')
-        };
-        if (sons[tipo]) {
-            sons[tipo].play().catch(error => console.log('Reprodução de som bloqueada pelo navegador'));
-        }
+        legenda.style.animation = "pulsarTexto 1.5s infinite";
     }
 
     ativarSimboloEspecial(tipo) {
-        const simbolos = document.querySelectorAll('.simbolo');
-        simbolos.forEach(simbolo => {
-            simbolo.style.transform = 'rotate(360deg)';
-            setTimeout(() => simbolo.style.transform = '', 1000);
+        const simbolos = document.querySelectorAll(".simbolo");
+        simbolos.forEach((simbolo) => {
+            simbolo.style.transform = "rotate(360deg)";
+            setTimeout(() => (simbolo.style.transform = ""), 1000);
         });
     }
 }
 
-window.addEventListener('load', () => {
+window.addEventListener("load", () => {
     new JogoAlquimia();
 });
