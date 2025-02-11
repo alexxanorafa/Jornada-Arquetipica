@@ -307,7 +307,7 @@ h2 {
   100% { transform: translateY(0); }
 }
 .sistema-alquimico {
-  animation: float 6s ease-in-out infinite;
+    animation: float 6s ease-in-out infinite;
 }
 
 .simbolo-elemento {
