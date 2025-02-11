@@ -1,3 +1,61 @@
+document.addEventListener("DOMContentLoaded", function() {
+    const menuIcon = document.getElementById("menuIcon");
+    const menu = document.getElementById("menu");
+
+    menuIcon.addEventListener("click", function(e) {
+        e.stopPropagation();
+        menu.classList.toggle("active");
+        menuIcon.classList.toggle("active");
+    });
+
+    document.addEventListener("click", function(e) {
+        if (!menu.contains(e.target) && !menuIcon.contains(e.target)) {
+            menu.classList.remove("active");
+            menuIcon.classList.remove("active");
+        }
+    });
+
+    document.querySelectorAll(".menu-item").forEach(item => {
+        item.addEventListener("mouseenter", function() {
+            this.style.transform = "translateY(-3px)";
+        });
+        
+        item.addEventListener("mouseleave", function() {
+            this.style.transform = "translateY(0)";
+        });
+    });
+});
+
+    // ========== CÓDIGO DO MENU ==========
+    const menuIcon = document.getElementById("menuIcon");
+    const menu = document.getElementById("menu");
+
+    // Abrir/Fechar menu
+    menuIcon.addEventListener("click", function(e) {
+        e.stopPropagation();
+        menu.classList.toggle("active");
+        menuIcon.classList.toggle("active");
+    });
+
+    // Fechar menu ao clicar fora
+    document.addEventListener("click", function(e) {
+        if (!menu.contains(e.target) && !menuIcon.contains(e.target)) {
+            menu.classList.remove("active");
+            menuIcon.classList.remove("active");
+        }
+    });
+
+    // Animar itens do menu
+    document.querySelectorAll(".menu-item").forEach(item => {
+        item.addEventListener("mouseenter", function() {
+            this.style.transform = "translateY(-3px)";
+        });
+        
+        item.addEventListener("mouseleave", function() {
+            this.style.transform = "translateY(0)";
+        });
+    });
+
 class JogoAlquimia {
     constructor() {
         this.arquetiposAtivos = new Set();
@@ -115,16 +173,48 @@ class JogoAlquimia {
         });
     }
 
+    generateSymbol(tipo) {
+        const symbols = {
+            ouroboros: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#2c3e50" stroke-width="3"/>
+                <path d="M30 50Q50 30 70 50Q50 70 30 50" fill="none" stroke="#d4b192" stroke-width="3"/>
+            </svg>`,
+            
+            caduceu: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 5v90M45 20l10-15 10 15M45 80l10 15 10-15" 
+                      stroke="#2c3e50" stroke-width="3" fill="none"/>
+            </svg>`,
+            
+            triquetra: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 20a30 30 0 0 1 30 30 30 30 0 0 1-30 30 30 30 0 0 1-30-30 30 30 0 0 1 30-30m0 15a15 15 0 0 0-15 15 15 15 0 0 0 15 15 15 15 0 0 0 15-15 15 15 0 0 0-15-15" 
+                      stroke="#2c3e50" stroke-width="3" fill="none"/>
+            </svg>`,
+            
+            arvore: `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 95V50M50 50Q30 30 50 10Q70 30 50 50M40 35L50 25 60 35M45 45L50 40 55 45" 
+                      stroke="#2c3e50" stroke-width="3" fill="none"/>
+            </svg>`
+        };
+
+        return encodeURIComponent(symbols[tipo])
+            .replace(/'/g, '%27')
+            .replace(/"/g, '%22');
+    }
+
     configurarSimbolos() {
         document.querySelectorAll('.simbolo').forEach(simbolo => {
             simbolo.addEventListener('click', () => {
                 simbolo.classList.toggle('ativo');
+                const tipo = simbolo.dataset.simbolo;
                 const elemento = simbolo.dataset.elemento;
                 
                 if (simbolo.classList.contains('ativo')) {
+                    const svg = this.generateSymbol(tipo);
+                    simbolo.style.backgroundImage = `url("data:image/svg+xml;utf8,${svg}")`;
                     this.simbolosAtivos.add(elemento);
                     this.reproduzirSom('symbol');
                 } else {
+                    simbolo.style.backgroundImage = '';
                     this.simbolosAtivos.delete(elemento);
                 }
                 
@@ -400,7 +490,7 @@ class JogoAlquimia {
 
     reproduzirSom(tipo) {
         const sons = {
-            flip: new Audio('data:audio/wav;base64,UklGRl9v...'), // Som base64 encurtado
+            flip: new Audio('data:audio/wav;base64,UklGRl9v...'),
             symbol: new Audio('data:audio/wav;base64,UklGRkZ...'),
             success: new Audio('data:audio/wav;base64,UklGRkZ...'),
             reset: new Audio('data:audio/wav;base64,UklGRkZ...'),
