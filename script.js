@@ -1,31 +1,3 @@
-document.addEventListener("DOMContentLoaded", function() {
-    const menuIcon = document.getElementById("menuIcon");
-    const menu = document.getElementById("menu");
-
-    menuIcon.addEventListener("click", function(e) {
-        e.stopPropagation();
-        menu.classList.toggle("active");
-        menuIcon.classList.toggle("active");
-    });
-
-    document.addEventListener("click", function(e) {
-        if (!menu.contains(e.target) && !menuIcon.contains(e.target)) {
-            menu.classList.remove("active");
-            menuIcon.classList.remove("active");
-        }
-    });
-
-    document.querySelectorAll(".menu-item").forEach(item => {
-        item.addEventListener("mouseenter", function() {
-            this.style.transform = "translateY(-3px)";
-        });
-        
-        item.addEventListener("mouseleave", function() {
-            this.style.transform = "translateY(0)";
-        });
-    });
-});
-
 class JogoAlquimia {
     constructor() {
         this.arquetiposAtivos = new Set();
@@ -86,23 +58,22 @@ class JogoAlquimia {
 
     configurarMenu() {
         const menuIcon = document.getElementById("menuIcon");
-        const menu = document.getElementById("mainMenu");
+        const mainMenu = document.getElementById("mainMenu");
 
         menuIcon.addEventListener("click", (event) => {
             event.stopPropagation();
-            menu.classList.toggle("active");
+            mainMenu.classList.toggle("active");
         });
 
         document.addEventListener("click", (event) => {
-            if (!menu.contains(event.target) && !menuIcon.contains(event.target)) {
-                menu.classList.remove("active");
+            if (!mainMenu.contains(event.target) && !menuIcon.contains(event.target)) {
+                mainMenu.classList.remove("active");
             }
         });
 
         document.querySelectorAll(".menu-item").forEach((item) => {
-            item.addEventListener("click", (event) => {
-                event.preventDefault();
-                menu.classList.remove("active");
+            item.addEventListener("click", () => {
+                mainMenu.classList.remove("active");
             });
         });
     }
