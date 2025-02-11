@@ -9,8 +9,12 @@
 </head>
 <body>
     <header>
-        <div class="menu-icon" id="menuIcon">☰</div>
-        <nav class="menu" id="menu">
+        <div class="menu-icon" id="menuIcon">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <nav class="menu" id="mainMenu">
             <ul>
                 <a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/" class="menu-item">Tempo e Sonhos</a>
                 <a href="https://alexxanorafa.github.io/posicionamentodosastros/" class="menu-item">Mapa Astral</a>
@@ -47,7 +51,9 @@
             <h2>Arquétipos Primordiais</h2>
             <div class="grid-arquetipos">
                 <div class="card-arquetipo" data-arquetipo="curador" data-elemento="agua">
-                    <div class="frente"></div>
+                    <div class="frente">
+                        <div class="elemento-icon">🌊</div>
+                    </div>
                     <div class="verso">
                         <h3>O Curador</h3>
                         <p>Transformação através da cura emocional</p>
@@ -55,7 +61,9 @@
                     </div>
                 </div>
                 <div class="card-arquetipo" data-arquetipo="sabio" data-elemento="ar">
-                    <div class="frente"></div>
+                    <div class="frente">
+                        <div class="elemento-icon">🌪️</div>
+                    </div>
                     <div class="verso">
                         <h3>O Sábio</h3>
                         <p>Sabedoria através da contemplação</p>
@@ -63,7 +71,9 @@
                     </div>
                 </div>
                 <div class="card-arquetipo" data-arquetipo="heroi" data-elemento="fogo">
-                    <div class="frente"></div>
+                    <div class="frente">
+                        <div class="elemento-icon">🔥</div>
+                    </div>
                     <div class="verso">
                         <h3>O Herói</h3>
                         <p>Coragem através da ação</p>
@@ -71,7 +81,9 @@
                     </div>
                 </div>
                 <div class="card-arquetipo" data-arquetipo="mae" data-elemento="terra">
-                    <div class="frente"></div>
+                    <div class="frente">
+                        <div class="elemento-icon">🌱</div>
+                    </div>
                     <div class="verso">
                         <h3>A Grande Mãe</h3>
                         <p>Nutrição através da compaixão</p>
@@ -84,10 +96,12 @@
         <section class="secao-labirintos">
             <h2>Labirintos da Consciência</h2>
             <div class="controle-labirinto">
-                <select id="selecionarLabirinto">
-                    <option value="chartres">Catedral de Chartres</option>
-                    <option value="cristal">Labirinto de Cristal</option>
-                    <option value="espiral">Espiral Meditativa</option>
+                <select id="selecionarLabirinto" class="styled-select">
+                    <option value="chartres">🏰 Catedral de Chartres</option>
+                    <option value="cristal">🔮 Labirinto de Cristal</option>
+                    <option value="espiral">🌀 Espiral Meditativa</option>
+                    <option value="mandala">🕉️ Mandala Sagrada</option>
+                    <option value="hexagono">📐 Labirinto Hexagonal</option>
                 </select>
                 <div class="dificuldade">
                     <span>Dificuldade:</span>
