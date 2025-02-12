@@ -345,41 +345,40 @@ button:hover {
 /* Símbolos Alquímicos */
 .puzzle-simbolos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Metade de 100px */
-  gap: 0.5rem; /* Metade de 1rem */
-  margin: 1rem 0; /* Metade de 2rem */
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  margin: 2rem 0;
 }
 
 .simbolo {
   aspect-ratio: 1;
-  border: 1px solid var(--secondary); /* Metade de 2px */
-  border-radius: 7.5px; /* Metade de 15px */
+  border: 2px solid var(--secondary);
+  border-radius: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 1rem; /* Metade de 2rem */
+  font-size: 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   background: rgba(255, 255, 255, 0.9);
   transition: transform 0.3s, box-shadow 0.3s;
-  background-size: 30%; /* Metade de 60% */
+  background-size: 60%;
   background-position: center;
   background-repeat: no-repeat;
 }
 
 .simbolo.ativo {
   animation: pulsar 1.5s infinite;
-  box-shadow: 0 0 7.5px var(--glow); /* Metade de 15px */
-  transform: scale(1.05) rotate(2.5deg); /* Ajustado para metade da rotação */
+  box-shadow: 0 0 15px var(--glow);
+  transform: scale(1.1) rotate(5deg);
 }
 
 @keyframes pulsar {
   0% { transform: scale(1); }
-  50% { transform: scale(1.05); } /* Ajustado para manter a proporção */
+  50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
-
 
 .dica {
   position: absolute;
@@ -424,42 +423,6 @@ button:hover {
 
 .simbolo.ativo::after {
   opacity: 1;
-}
-/* CSS para o sistema de combinação */
-.caldeirao-interativo {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 1rem;
-  margin: 2rem 0;
-}
-
-.slot {
-  width: 80px;
-  height: 80px;
-  border: 2px dashed var(--secondary);
-  border-radius: 10px;
-  transition: all 0.3s;
-}
-
-.slot[data-conteudo] {
-  background-size: 50%;
-  background-repeat: no-repeat;
-  background-position: center;
-  border-color: var(--glow);
-}
-
-.operador {
-  font-size: 2rem;
-  color: var(--primary);
-}
-
-.resultado-alquimia {
-  grid-column: 1 / -1;
-  min-height: 100px;
-  border: 2px solid var(--primary);
-  border-radius: 10px;
-  padding: 1rem;
 }
 
 /* Responsividade */
