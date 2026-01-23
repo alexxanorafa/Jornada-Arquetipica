@@ -2,182 +2,421 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Athanor: Experiência interativa de alquimia quântica e psicologia junguiana">
+    <meta name="keywords" content="alquimia, psicologia, jung, quântica, transmutação, arquétipos">
     <title>Jornada Arquetípica</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Montserrat:wght@300;400;500;600&family=UnifrakturMaguntia&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 </head>
 <body>
-    <header>
-        <div class="menu-icon" id="menuIcon">
-            <span></span>
-            <span></span>
-            <span></span>
+    <!-- Acessibilidade -->
+    <div class="accessibility-bar">
+        <button id="highContrast" class="accessibility-btn" aria-label="Alto contraste">
+            <i class="fas fa-adjust"></i>
+        </button>
+        <button id="fontSizeIncrease" class="accessibility-btn" aria-label="Aumentar texto">
+            <i class="fas fa-text-height"></i>
+        </button>
+        <button id="screenReaderToggle" class="accessibility-btn" aria-label="Ativar leitor de tela">
+            <i class="fas fa-assistive-listening-systems"></i>
+        </button>
+    </div>
+
+    <!-- Tutorial Modal -->
+    <div id="tutorialModal" class="modal" role="dialog" aria-labelledby="tutorialTitle" hidden>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="tutorialTitle">Bem-vindo ao Athanor</h2>
+                <button class="modal-close" aria-label="Fechar tutorial">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tutorial-step active" id="step1">
+                    <h3>Jornada Arquetípica</h3>
+                    <p>Esta é uma experiência interativa que combina psicologia junguiana, alquimia e física quântica. Você explorará arquétipos através da transmutação simbólica.</p>
+                    <div class="tutorial-illustration">
+                        <div class="symbol-circle">⚗️</div>
+                        <div class="arrow">→</div>
+                        <div class="symbol-circle">🧠</div>
+                        <div class="arrow">→</div>
+                        <div class="symbol-circle">✨</div>
+                    </div>
+                </div>
+                <div class="tutorial-step" id="step2">
+                    <h3>Arquétipos</h3>
+                    <p>No painel esquerdo estão os arquétipos junguianos. Cada um representa um aspecto do inconsciente coletivo. Clique para ver detalhes ou arraste para o caldeirão.</p>
+                    <div class="instruction">
+                        <i class="fas fa-mouse-pointer"></i> Clique para detalhes
+                        <i class="fas fa-arrows-alt-h"></i> Arraste para transmutar
+                    </div>
+                </div>
+                <div class="tutorial-step" id="step3">
+                    <h3>Labirinto Quântico</h3>
+                    <p>No centro, o labirinto representa sua jornada de autoconhecimento. Desenhe caminhos para conectar arquétipos e ativar transmutações.</p>
+                    <div class="instruction">
+                        <i class="fas fa-draw-polygon"></i> Clique e arraste para desenhar
+                    </div>
+                </div>
+                <div class="tutorial-step" id="step4">
+                    <h3>Caldeirão</h3>
+                    <p>No painel direito, o caldeirão é onde a transmutação ocorre. Solte arquétipos aqui para combiná-los e descobrir novas sínteses.</p>
+                    <div class="instruction">
+                        <i class="fas fa-hand-rock"></i> Arraste arquétipos para aqui
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="prevStep">Anterior</button>
+                <span class="step-indicator">Passo <span id="currentStep">1</span> de 4</span>
+                <button class="btn-primary" id="nextStep">Próximo</button>
+                <button class="btn-text" id="skipTutorial">Pular</button>
+            </div>
         </div>
-        <nav class="menu" id="mainMenu">
+    </div>
+
+    <!-- Journal Modal -->
+    <div id="journalModal" class="modal" role="dialog" aria-labelledby="journalTitle" hidden>
+        <div class="modal-content journal-modal">
+            <div class="modal-header">
+                <h2 id="journalTitle"><i class="fas fa-book-open"></i>Diário Alquímico</h2>
+                <div class="modal-actions">
+                    <button class="btn-icon" id="exportJournal" aria-label="Exportar diário">
+                        <i class="fas fa-download"></i>
+                    </button>
+                    <button class="modal-close" aria-label="Fechar diário">&times;</button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="journal-stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalTransmutations">0</div>
+                        <div class="stat-label">Transmutações</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="uniqueCombinations">0</div>
+                        <div class="stat-label">Combinações</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="alchemicalLevel">I</div>
+                        <div class="stat-label">Nível Alquímico</div>
+                    </div>
+                </div>
+                <div class="journal-entries" id="journalEntries">
+                    <!-- Entries will be populated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Achievements Modal -->
+ <!-- <div id="achievementsModal" class="modal" role="dialog" aria-labelledby="achievementsTitle" hidden>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="achievementsTitle"><i class="fas fa-trophy"></i> Conquistas Alquímicas</h2>
+                <button class="modal-close" aria-label="Fechar conquistas">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="achievements-grid" id="achievementsGrid">
+                     Achievements will be populated here
+                </div>
+            </div>
+        </div>
+    </div>-->
+
+    <!-- Main App -->
+    <div class="app-wrapper">
+        <!-- Left Panel - Archetypes -->
+        <aside class="panel-left" role="complementary" aria-label="Painel de arquétipos">
+            <header class="panel-header">
+                <h1 class="logo" aria-label="Athanor">
+                    <span class="logo-main">ATHANOR</span>
+                    <span class="logo-sub">Alquimia Quântica</span>
+                </h1>
+                <div class="panel-actions">
+                    <button id="toggleJournal" class="btn-icon" aria-label="Abrir diário">
+                        <i class="fas fa-book"></i>
+                    </button>
+                    <button id="toggleAchievements" class="btn-icon" aria-label="Ver conquistas">
+                        <i class="fas fa-trophy"></i>
+                    </button>
+                    <button id="helpButton" class="btn-icon" aria-label="Ajuda">
+                        <i class="fas fa-question-circle"></i>
+                    </button>
+                </div>
+            </header>
+            
+            <div class="search-box">
+                <input type="text" 
+                       id="searchArquetipos" 
+                       placeholder="Buscar arquétipo..."
+                       aria-label="Buscar arquétipos">
+                <i class="fas fa-search"></i>
+            </div>
+            
+            <nav class="archetype-categories" role="navigation" aria-label="Categorias de arquétipos">
+                <button class="category-btn active" data-category="all">Todos</button>
+                <button class="category-btn" data-category="elements">Elementos</button>
+                <button class="category-btn" data-category="personas">Personas</button>
+                <button class="category-btn" data-category="shadows">Sombras</button>
+            </nav>
+            
+            <section class="scrollable-content" aria-label="Lista de arquétipos">
+                <div class="deck-arquetipos" id="deckArquetipos" role="list" aria-label="Cartas de arquétipos">
+                    <!-- Archetype cards will be generated here -->
+                </div>
+            </section>
+            
+            <div class="status-panel" role="status" aria-live="polite">
+                <div class="narrativa-box" id="legendaAlquimia">
+                    <div class="narrativa-header">
+                        <i class="fas fa-scroll"></i>
+                        <span>Inicie a transmutação...</span>
+                    </div>
+                    <div class="narrativa-content" id="narrativaContent">
+                        Selecione um arquétipo para começar sua jornada de autoconhecimento.
+                    </div>
+                </div>
+                <div class="progress-indicator">
+                    <div class="progress-label">Progresso da Jornada</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="journeyProgress"></div>
+                    </div>
+                    <div class="progress-text" id="progressText">0%</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Canvas Area -->
+        <main class="canvas-area" role="main" aria-label="Área do labirinto quântico">
+            <div id="quantum-overlay" aria-hidden="true"></div>
+            
+            <!-- Canvas Container -->
+            <div class="canvas-container">
+                <canvas id="labyrinthCanvas" 
+                        role="img" 
+                        aria-label="Labirinto quântico interativo"
+                        tabindex="0">
+                    <p>Seu navegador não suporta o elemento canvas. Esta é uma representação visual do labirinto quântico onde você pode desenhar caminhos entre arquétipos.</p>
+                </canvas>
+                
+                <!-- Transmutation Feedback -->
+                <div class="transmutation-feedback" id="transmutationFeedback" hidden>
+                    <div class="feedback-content">
+                        <div class="feedback-icon" id="feedbackIcon">✨</div>
+                        <div class="feedback-text" id="feedbackText">Transmutação realizada!</div>
+                    </div>
+                </div>
+                
+                <!-- Particle Effects Container -->
+                <div id="particleContainer" aria-hidden="true"></div>
+            </div>
+            
+            <!-- Canvas Controls -->
+            <div class="canvas-controls" role="toolbar" aria-label="Controles do labirinto">
+                <div class="control-group">
+                    <label for="selecionarLabirinto" class="control-label">Labirinto:</label>
+                    <select id="selecionarLabirinto" class="styled-select" aria-label="Selecionar tipo de labirinto">
+                        <option value="mandala">Mandala Quântica</option>
+                        <option value="spiral">Espiral da Transformação</option>
+                        <option value="lattice">Rede de Possibilidades</option>
+                        <option value="chaos">Ordem no Caos</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <button id="reiniciarLabirinto" class="btn-icon" aria-label="Reiniciar labirinto">
+                        <i class="fas fa-redo"></i>
+                    </button>
+                    <button id="clearCanvas" class="btn-icon" aria-label="Limpar desenho">
+                        <i class="fas fa-eraser"></i>
+                    </button>
+                    <button id="toggleGrid" class="btn-icon" aria-label="Alternar grade">
+                        <i class="fas fa-th"></i>
+                    </button>
+                </div>
+                
+                <div class="control-group">
+                    <div class="timer-display" aria-label="Tempo de sessão">
+                        <i class="fas fa-hourglass-half"></i>
+                        <span id="time">00:00:00</span>
+                    </div>
+                    <div class="quantum-state">
+                        <i class="fas fa-atom"></i>
+                        <span id="quantumState">Superposição</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="quick-action-btn" id="quickTransmute" aria-label="Transmutação rápida">
+                    <i class="fas fa-bolt"></i>
+                    <span>Transmutar</span>
+                </button>
+                <button class="quick-action-btn" id="saveJourney" aria-label="Salvar jornada">
+                    <i class="fas fa-save"></i>
+                    <span>Salvar</span>
+                </button>
+                <button class="quick-action-btn" id="shareJourney" aria-label="Compartilhar jornada">
+                    <i class="fas fa-share-alt"></i>
+                    <span>Compartilhar</span>
+                </button>
+            </div>
+        </main>
+
+        <!-- Right Panel - Alchemical Cauldron -->
+        <aside class="panel-right" role="complementary" aria-label="Painel do caldeirão alquímico">
+            <header class="panel-header">
+                <h2 class="panel-title">
+                    <i class="fas fa-mortar-pestle"></i>
+                    Caldeirão Alquímico
+                </h2>
+                <div class="cauldron-stats">
+                    <div class="temperature-display">
+                        <span class="temp-value" id="cauldronTemp">650°C</span>
+                        <span class="temp-label">Temperatura</span>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Cauldron Visualization -->
+            <div class="caldeirao-container" aria-label="Representação visual do caldeirão">
+                <div id="caldeiraoAlquimico" class="caldeirao-visual" role="img" aria-label="Caldeirão alquímico ativo">
+                    <div class="glow-core"></div>
+                    <div class="liquid-layer" id="cauldronLiquid"></div>
+                    <div class="bubbles-container" id="cauldronBubbles"></div>
+                    <div class="ingredients-display" id="cauldronIngredients">
+                        <!-- Ingredients will appear here -->
+                    </div>
+                    <div class="transmutation-indicator" id="transmutationReady" hidden>
+                        <div class="pulse-ring"></div>
+                        <div class="ready-text">PRONTO</div>
+                    </div>
+                </div>
+                
+                <div class="cauldron-controls">
+                    <div class="slider-control">
+                        <label for="heatControl">Calor:</label>
+                        <input type="range" id="heatControl" min="0" max="1000" value="650" 
+                               aria-label="Controlar calor do caldeirão">
+                    </div>
+                    <button id="activateTransmutation" class="btn-cauldron" aria-label="Ativar transmutação">
+                        <i class="fas fa-fire"></i>
+                        Transmutar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Active Elements -->
+            <div class="active-elements" aria-label="Elementos ativos no caldeirão">
+                <h3 class="section-title">Elementos Ativos</h3>
+                <div class="elements-grid" id="activeElementsGrid">
+                    <!-- Active elements will appear here -->
+                </div>
+            </div>
+            
+            <!-- Symbols Grid -->
+            <section class="scrollable-content" aria-label="Símbolos alquímicos disponíveis">
+                <h3 class="section-title">Símbolos Alquímicos</h3>
+                <div class="grid-simbolos" id="gridSimbolos" role="list" aria-label="Grade de símbolos">
+                    <!-- Symbols will be generated here -->
+                </div>
+            </section>
+            
+            <!-- Recent Transmutations -->
+            <div class="recent-transmutations" aria-label="Transmutações recentes">
+                <h3 class="section-title">Transmutações Recentes</h3>
+                <div class="transmutation-list" id="recentTransmutations">
+                    <!-- Recent transmutations will appear here -->
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Audio Elements (hidden) -->
+    <div class="audio-container" aria-hidden="true">
+        <audio id="transmuteSound" preload="auto">
+            <source src="assets/sounds/transmute.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="selectSound" preload="auto">
+            <source src="assets/sounds/select.mp3" type="audio/mpeg">
+        </audio>
+        <audio id="successSound" preload="auto">
+            <source src="assets/sounds/success.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen" role="status" aria-live="polite">
+        <div class="loading-content">
+            <div class="alchemical-symbol loading-animation">⚗️</div>
+            <h2>Inicializando Athanor...</h2>
+            <div class="loading-progress">
+                <div class="loading-bar"></div>
+            </div>
+            <p class="loading-text" id="loadingText">Carregando arquétipos...</p>
+        </div>
+    </div>
+
+    <!-- Snackbar for notifications -->
+    <div id="snackbar" class="snackbar" role="alert" aria-live="assertive" hidden></div>
+
+    <!-- Keyboard Shortcuts Help -->
+    <div id="keyboardHelp" class="keyboard-help" hidden>
+        <h3>Atalhos de Teclado</h3>
         <ul>
-            <!-- Cada item de menu dentro de <li> -->
-              <li><a href="https://alexxanorafa.github.io/Alquimia-dos-Sentimentos/" class="menu-item">Alquimia dos Sentimentos</a></li>
-              <li><a href="https://alexxanorafa.github.io/Almas-Conectadas/" class="menu-item">Almas Conectadas</a></li>
-              <li><a href="https://alexxanorafa.github.io/Aneis_da_Sabedoria/" class="menu-item">Anéis da Sabedoria</a></li>
-              <li><a href="https://alexxanorafa.github.io/ANIMA/" class="menu-item">ANIMA</a></li>
-              <li><a href="https://alexxanorafa.github.io/ANIMA-II/" class="menu-item">ANIMA II</a></li>
-              <li><a href="https://alexxanorafa.github.io/Animais-de-Poder/" class="menu-item">Animais de Poder</a></li>
-              <li><a href="https://alexxanorafa.github.io/Biblioteca-Onirica/" class="menu-item">Biblioteca Onirica</a></li>
-              <li><a href="https://alexxanorafa.github.io/Buzios/" class="menu-item">Buzios</a></li>
-              <li><a href="https://alexxanorafa.github.io/Cartas-de-Sibila/" class="menu-item">Cartas de Sibila</a></li>
-              <li><a href="https://alexxanorafa.github.io/Do-you-love-me/" class="menu-item">Do you love me?</a></li>
-              <li><a href="https://alexxanorafa.github.io/I-Ching-Virtual/" class="menu-item">I Ching Virtual</a></li>
-              <li><a href="https://alexxanorafa.github.io/Jogo-Didatico-Banco-de-Dados/" class="menu-item">Jogo Didatico Banco de Dados</a></li>
-              <li><a href="https://alexxanorafa.github.io/Jornada-Arquetipica/" class="menu-item">Jornada Arquetípica</a></li>
-              <li><a href="https://alexxanorafa.github.io/Jornadas-Mitologica/" class="menu-item">Jornada Mitológica</a></li>
-              <li><a href="https://alexxanorafa.github.io/Kabbalah-Interativa/" class="menu-item">Kabbalah Interativa</a></li>
-              <li><a href="https://alexxanorafa.github.io/Livro-das-Sombras/" class="menu-item">Livro das Sombras</a></li>
-              <li><a href="https://alexxanorafa.github.io/Magia-das-Cores/" class="menu-item">Magia das Cores</a></li>
-              <li><a href="https://alexxanorafa.github.io/Murmurios-do-Destino/" class="menu-item">Murmúrios do Destino</a></li>
-              <li><a href="https://alexxanorafa.github.io/O-Construtor-do-Destino/" class="menu-item">O Construtor do Destino</a></li>
-              <li><a href="https://alexxanorafa.github.io/Oraculo-das-Pedras/" class="menu-item">Oráculo das Pedras</a></li>
-              <li><a href="https://alexxanorafa.github.io/Oraculo-dos-Deuses/" class="menu-item">Oráculo dos Deuses</a></li>
-              <li><a href="https://alexxanorafa.github.io/Oraculo-Numerologico/" class="menu-item">Oráculo Numerológico</a></li>
-              <li><a href="https://alexxanorafa.github.io/Pendulo-Divinatorio/" class="menu-item">Pendulo Divinatorio</a></li>
-              <li><a href="https://alexxanorafa.github.io/Portal-das-Almas/" class="menu-item">Portal das Almas</a></li>
-              <li><a href="https://alexxanorafa.github.io//PROJECT-AETHER/" class="menu-item">PROJECT AETHER</a></li>
-              <li><a href="https://alexxanorafa.github.io/Quantum-Oracle/" class="menu-item">Quantum Oracle</a></li>
-              <li><a href="https://alexxanorafa.github.io/Runas-Celtas/" class="menu-item">Runas Celtas</a></li>
-              <li><a href="https://alexxanorafa.github.io/Runas-Estelares/" class="menu-item">Runas Estelares</a></li>
-              <li><a href="https://alexxanorafa.github.io/Runas-do-Destino/" class="menu-item">Runas Nórdicas</a></li>
-              <li><a href="https://alexxanorafa.github.io/Tabuleiro-Quantico/" class="menu-item">Tabuleiro Quantico</a></li>
-              <li><a href="https://alexxanorafa.github.io/TarodeMarselha/" class="menu-item">Tarô de Marselha</a></li>
-              <li><a href="https://alexxanorafa.github.io/Tasseografia/" class="menu-item">Tasseografia</a></li>
-              <li><a href="https://alexxanorafa.github.io/Tempo_e_Sonhos/" class="menu-item">Tempo e Sonhos</a></li>
-              <li><a href="https://alexxanorafa.github.io/The-Da-Vinci-Code/" class="menu-item">The Da Vinci Code</a></li>
-              <li><a href="https://alexxanorafa.github.io/Velvet-Quantum/" class="menu-item">Velvet Quantum</a></li>
-              <li><a href="https://alexxanorafa.github.io/Vitruvian-Resonance/" class="menu-item">Vitruvian-Resonance/</a></li>
-              <li><a href="https://alexxanorafa.github.io/Whispering-Shadows/" class="menu-item">Whispering Shadows</a></li>
-              <li><a href="https://alexxanorafa.github.io/Whispering-Shadows-2/" class="menu-item">Whispering Shadows 2</a></li>
-              <li><a href="https://alexxanorafa.github.io/Whispering-Shadows-3/" class="menu-item">Whispering Shadows 3</a></li>
-              <li><a href="https://alexxanorafa.github.io/Xamanismo-Animal/" class="menu-item">Xamanismo Animal</a></li>              
+            <li><kbd>Space</kbd> Pausar/Continuar</li>
+            <li><kbd>R</kbd> Reiniciar labirinto</li>
+            <li><kbd>J</kbd> Abrir diário</li>
+            <li><kbd>A</kbd> Abrir conquistas</li>
+            <li><kbd>H</kbd> Ajuda</li>
+            <li><kbd>Esc</kbd> Fechar modais</li>
         </ul>
-
-        </nav>
-    </header>
-
-    <div class="container">
-        <div class="sistema-alquimico">
-            <div class="caldeirao" id="caldeiraoAlquimico">
-                <div class="elementos-ativos"></div>
-            </div>
-            <div class="instrucoes">
-                <p>Combine Arquétipos e Símbolos para revelar sabedoria!</p>
-            </div>
-        </div>
-
-        <section class="secao-arquetipos">
-            <h2>Arquétipos Primordiais</h2>
-            <div class="grid-arquetipos">
-                <div class="card-arquetipo" data-arquetipo="curador" data-elemento="agua">
-                    <div class="frente">
-                        <div class="elemento-icon">🌊</div>
-                    </div>
-                    <div class="verso">
-                        <h3>O Curador</h3>
-                        <p>Transformação através da cura emocional</p>
-                        <div class="simbolo-elemento">🌊</div>
-                    </div>
-                </div>
-                <div class="card-arquetipo" data-arquetipo="sabio" data-elemento="ar">
-                    <div class="frente">
-                        <div class="elemento-icon">🌪️</div>
-                    </div>
-                    <div class="verso">
-                        <h3>O Sábio</h3>
-                        <p>Sabedoria através da contemplação</p>
-                        <div class="simbolo-elemento">🌪️</div>
-                    </div>
-                </div>
-                <div class="card-arquetipo" data-arquetipo="heroi" data-elemento="fogo">
-                    <div class="frente">
-                        <div class="elemento-icon">🔥</div>
-                    </div>
-                    <div class="verso">
-                        <h3>O Herói</h3>
-                        <p>Coragem através da ação</p>
-                        <div class="simbolo-elemento">🔥</div>
-                    </div>
-                </div>
-                <div class="card-arquetipo" data-arquetipo="mae" data-elemento="terra">
-                    <div class="frente">
-                        <div class="elemento-icon">🌱</div>
-                    </div>
-                    <div class="verso">
-                        <h3>A Grande Mãe</h3>
-                        <p>Nutrição através da compaixão</p>
-                        <div class="simbolo-elemento">🌱</div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="secao-labirintos">
-            <h2>Labirintos da Consciência</h2>
-            <div class="controle-labirinto">
-                <select id="selecionarLabirinto" class="styled-select">
-                    <option value="chartres">🏰 Catedral de Chartres</option>
-                    <option value="cristal">🔮 Labirinto de Cristal</option>
-                    <option value="espiral">🌀 Espiral Meditativa</option>
-                    <option value="mandala">🕉️ Mandala Sagrada</option>
-                    <option value="hexagono">📐 Labirinto Hexagonal</option>
-                </select>
-                <div class="dificuldade">
-                    <span>Dificuldade:</span>
-                    <div class="estrelas" data-dificuldade="3">★★★☆☆</div>
-                </div>
-            </div>
-            <canvas id="labyrinthCanvas"></canvas>
-            <div class="controles">
-                <button id="reiniciarLabirinto">↻ Reiniciar</button>
-                <div class="temporizador">⏳ 00:00</div>
-            </div>
-        </section>
-
-        <section class="secao-simbolos">
-            <h2>Símbolos Alquímicos</h2>
-            <div class="puzzle-simbolos">
-                <div class="simbolo" data-simbolo="ouroboros" data-elemento="fogo">
-                    <div class="dica">🔥</div>
-                </div>
-                <div class="simbolo" data-simbolo="caduceu" data-elemento="ar">
-                    <div class="dica">🌪️</div>
-                </div>
-                <div class="simbolo" data-simbolo="triquetra" data-elemento="agua">
-                    <div class="dica">🌊</div>
-                </div>
-                <div class="simbolo" data-simbolo="arvore" data-elemento="terra">
-                    <div class="dica">🌱</div>
-                </div>
-            </div>
-            <div class="legenda-interativa" id="legendaAlquimia"></div>
-        </section>
     </div>
 
-    <script src="script.js"></script>
-    <div class="tutorial-overlay" id="tutorial">
-        <div class="tutorial-content">
-            <h3>Bem-vindo à Jornada Arquetípica! 🌟</h3>
-            <p>Descubra conexões entre símbolos e arquétipos:</p>
-            <ol>
-                <li>Clique nos cards para revelar arquétipos</li>
-                <li>Ative símbolos alquímicos clicando neles</li>
-                <li>Combine elementos correspondentes</li>
-                <li>Navegue pelos labirintos desenhando o caminho</li>
-            </ol>
-            <button onclick="document.getElementById('tutorial').style.display='none'">Começar Jornada</button>
-        </div>
-    </div>
+    <!-- Scripts -->
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+
+<!-- Data -->
+<script src="js/data/archetypes.js"></script>
+<script src="js/data/fusions.js"></script>
+<script src="js/data/narratives.js"></script>
+
+<!-- Core Systems -->
+<script src="js/core/CanvasManager.js"></script>
+<script src="js/core/ParticleSystem.js"></script>
+<script src="js/core/ProgressionSystem.js"></script>
+<script src="js/core/QuantumAthanor.js"></script>
+
+<!-- UI Systems -->
+<script src="js/ui/JournalManager.js"></script>
+<script src="js/ui/AchievementManager.js"></script>
+<script src="js/ui/TutorialManager.js"></script>
+<script src="js/ui/FeedbackManager.js"></script>
+
+<!-- Utilities -->
+<script src="js/utils/helpers.js"></script>
+<script src="js/utils/storage.js"></script>
+
+<!-- Main Entry Point -->
+
+<script src="js/init-simple.js"></script>
+<script src="js/fix-modals.js"></script>
+<script src="js/main.js"></script>
 </body>
 </html>
-
-
-
-
-
