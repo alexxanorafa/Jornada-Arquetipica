@@ -386,6 +386,23 @@
             <li><kbd>Esc</kbd> Fechar modais</li>
         </ul>
     </div>
+        <!-- Botão flutuante para o ecossistema -->
+        <button id="ecosystemButton" class="ecosystem-button" title="Ecossistema de Aplicações">
+            <i class="fas fa-globe"></i>
+        </button>
+
+        <!-- Painel do ecossistema -->
+        <div id="ecosystemPanel" class="ecosystem-panel">
+            <div class="panel-header">
+                <h2>🌌 Ecossistema de Aplicações</h2>
+                <button id="closeEcosystemPanel" class="close-button">&times;</button>
+            </div>
+            <div class="panel-content">
+                <ul class="ecosystem-links" id="ecosystemLinks">
+                    <!-- Os links serão inseridos aqui via JavaScript -->
+                </ul>
+            </div>
+        </div>
 
     <!-- Scripts -->
 <!-- Scripts -->
@@ -414,7 +431,7 @@
 <script src="js/utils/storage.js"></script>
 
 <!-- Main Entry Point -->
-
+<script src="js/ecosystem.js"></script>
 <script src="js/init-simple.js"></script>
 <script src="js/fix-modals.js"></script>
 <script src="js/main.js"></script>
